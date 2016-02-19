@@ -70,26 +70,26 @@ if [ "$action" == 'create' ]
 		### create virtual host rules file
 		if ! echo "
 			server {
-				listen 80
-			    server_name $domain;
+				listen 80;
+				server_name $domain;
+				root $rootDir;
+				index index.php index.html index.htm;
 				
 				error_log   /var/log/nginx/log/$domain-error.log;
-    			access_log   /var/log/nginx/log/$domain-access.log;
+				access_log   /var/log/nginx/log/$domain-access.log;
 				
-			    location / {
-			    	root $rootDir;
-			    	index index.php index.html index.htm;
-			        try_files \$uri \$uri/ =404;
-			    }
+				location / {
+					try_files \$uri \$uri/ =404;
+				}
 
-			    location ~ \.php$ {
-			        try_files \$uri =404;
-			        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-			        fastcgi_pass unix:/var/run/php5-fpm.sock;
-			        fastcgi_index index.php;
-			        fastcgi_param SCRIPT_FILENAME $document_root\$fastcgi_script_name;
-			        include fastcgi_params;
-			    }
+				location ~ \.php$ {
+					try_files \$uri =404;
+					fastcgi_split_path_info ^(.+\.php)(/.+)$;
+					fastcgi_pass unix:/var/run/php-fpm/php5-fpm.sock;
+					fastcgi_index index.php;
+					fastcgi_param SCRIPT_FILENAME $document_root\$fastcgi_script_name;
+					include fastcgi_params;
+				}
 			}" > $sitesAvailabledomain
 		then
 			echo -e $"There is an ERROR creating $domain file"
