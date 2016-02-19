@@ -71,13 +71,14 @@ if [ "$action" == 'create' ]
 		if ! echo "
 			server {
 				listen 80
-				
-			    index index.php index.html index.htm;
-
 			    server_name $domain;
-
+				
+				error_log   /var/log/nginx/log/$domain-error.log;
+    			access_log   /var/log/nginx/log/$domain-access.log;
+				
 			    location / {
 			    	root $rootDir;
+			    	index index.php index.html index.htm;
 			        try_files \$uri \$uri/ =404;
 			    }
 
